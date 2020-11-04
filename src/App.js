@@ -1,11 +1,15 @@
 import React from 'react';
 import './App.css';
+import NavBar from './components/NavBar';
 import Home from './components/Home';
 
 function App() {
   return (
-    <div className="App">
-        <Home greeting="Challenge clase 04 Curso de React en CODER HOUSE" />
+    <div >
+      <div className="d-flex justify-content-center" >
+        <NavBar />
+      </div>
+      <Home className="d-flex justify-content-center" greeting="Challenge clase 05 Curso de React en CODER HOUSE" />
     </div>
   );
 }

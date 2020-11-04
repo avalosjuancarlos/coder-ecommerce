@@ -1,15 +1,16 @@
 import React from "react";
-import NabBar from "./NavBar";
+import ItemCount from "./ItemCount";
 
-const Home = ({greeting}) => (
-    <>
-    <div className="d-flex justify-content-center">
-    <NabBar />
+const onAddItem = (amount) => {
+    alert(`Se agregaron ${amount} items`);
+}
+
+const Home = ({className, greeting}) => (
+    <div >
+        <h1 className={className}>{greeting }</h1>
+        <br />
+        <ItemCount className={className}  onAdd={onAddItem} />
     </div>
-    <div className="d-flex justify-content-center">
-        <h1>{greeting }</h1>
-    </div>
-    </>
 );
 
 export default Home;
