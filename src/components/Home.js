@@ -1,12 +1,7 @@
-import { get } from "jquery";
 import React, {useState, useEffect} from "react";
 import ItemCount from "./ItemCount";
+import ItemDetailContainer from "./ItemDetailContainer";
 import ItemList from "./ItemList";
-
-
-const onAddItem = (amount) => {
-    alert(`Se agregaron ${amount} items`);
-}
 
 const getMockData = new Promise((resolve, reject)=>{
     setTimeout(()=> {
@@ -24,8 +19,12 @@ const Home = ({className, greeting}) => {
         });
     }, []);
 
+    const onAddItem = (amount) => {
+        alert(`Se agregaron ${amount} items`);
+    }
+
     return (<div >
-        <h1 className={className}>{greeting }</h1>
+        {/* <h1 className={className}>{greeting }</h1>
         <br />
         <ItemCount className={className}  onAdd={onAddItem} />
         <br />
@@ -36,6 +35,10 @@ const Home = ({className, greeting}) => {
             :
                 <ItemList data={listItems} />
         }
+        </div> */}
+        <br />
+        <div className={className}>
+            <ItemDetailContainer />
         </div>
     </div>);
 };
