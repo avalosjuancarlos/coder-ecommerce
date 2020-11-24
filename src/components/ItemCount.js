@@ -32,7 +32,7 @@ const ItemCount = ({initial = 0, min = 0, max = 10, onAdd = () => {}}) => {
             </Row>
             <Row >
                 <Col style={{marginTop:10}} className="d-flex justify-content-center">
-                    <Button onClick={onAddItem} >Agregar al carrito</Button>
+                    <Button onClick={onAddItem} >Comprar {amount}</Button>
                 </Col>   
             </Row>
             <div></div>
