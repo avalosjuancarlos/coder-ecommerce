@@ -14,6 +14,10 @@ const ItemCount = ({initial = 0, min = 0, max = 10, onAdd = () => {}}) => {
     }
 
     const onAddItem = () => {
+        if(amount < 1) {
+            alert("Debe agregar al menos un producto");
+            return;
+        }
         onAdd(amount);
     }
 

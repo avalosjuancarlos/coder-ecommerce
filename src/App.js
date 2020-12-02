@@ -4,10 +4,12 @@ import NavBar from "./components/NavBar";
 import Home from "./components/Home";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import ItemDetailContainer from "./components/ItemDetailContainer";
-import Cart from "./Cart";
+import Cart from "./components/Cart";
+import CartProvider from "./context/CartProvider";
 
 function App() {
   return (
+    <CartProvider >
     <BrowserRouter>
       <div>
         <div className="d-flex justify-content-center">
@@ -29,6 +31,7 @@ function App() {
         </Switch>
       </div>
     </BrowserRouter>
+    </CartProvider>
   );
 }
 
