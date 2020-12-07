@@ -3,9 +3,9 @@ import { FaCartPlus } from "react-icons/fa";
 import CartContext from "../context/CartContext";
 
 const CartIcon = () => {
-    const {cart, addToCart, isInCart, cartSize } = useContext(CartContext);
+    const {cart, addToCart, isInCart, cartSize, cartCount } = useContext(CartContext);
 
-    return <span><FaCartPlus/> {cartSize}</span>;
+    return <span><FaCartPlus/> {cartCount}</span>;
 };
 
 export default CartIcon;
