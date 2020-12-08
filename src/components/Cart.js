@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import CartContext from "../context/CartContext";
 
 const Cart = ({className}) => {
@@ -10,7 +11,7 @@ const Cart = ({className}) => {
     )
 
     return (<div className={className}>
-        {cartCount === 0 ? <p>Carrito Vacio</p> :  cartRender()}
+        {cartCount === 0 ? <p>Carrito Vacio<br/> <Link to="/">Ver listado de productos</Link> </p> :  cartRender()}
         
     </div>);
 }
