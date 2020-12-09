@@ -19,7 +19,10 @@ function App() {
           <Route exact path="/">
             <Home className="d-flex justify-content-center" />
           </Route>
-          <Route exact path="/products">
+          <Route path="/categories/:categoryId">
+            <Home className="d-flex justify-content-center" />
+          </Route>
+          <Route path="/categories/">
             <Home className="d-flex justify-content-center" />
           </Route>
           <Route path="/item/:id" >

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { useParams } from 'react-router-dom';
-import mockData from '../repository/products';
+import { getFirestore } from '../firebase';
 import ItemDetail from './ItemDetail';
 
 const ItemDetailContainer = ({className}) => {
@@ -9,23 +9,17 @@ const ItemDetailContainer = ({className}) => {
     const {id} = useParams();
 
     useEffect(()=> {
-        const getMockData = new Promise((resolve, reject)=>{
-            setTimeout(()=> {
-                // resolve({ 
-                //     id: "00000000001", 
-                //     name: "notebook", 
-                //     description: "notebook de 14 pulgadas", 
-                //     stock: 100 
-                // });
-
-                resolve(mockData.find(item => item.id === id));
+        const db = getFirestore();
+        const itemCollection = db.collection("items");
+        const item = itemCollection.doc(id);
+        item.get().then((doc) => {
+            if(!doc.exists){
+                console.log("Item does not exist! :(");
+                return;
             }
-            , 3_000);
-        });
-
-        getMockData.then(result => {
-            console.log("pasamos por use effect");
-            setItem(result);
+            setItem({id:doc.id, ...doc.data()});
+        }).catch((error) => {
+            console.log("Error searching item id:" + id, error);
         });
     });
 

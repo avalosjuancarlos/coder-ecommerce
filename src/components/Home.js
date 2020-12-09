@@ -1,23 +1,38 @@
 import React, {useState, useEffect} from "react";
 import ItemList from "./ItemList";
-import mockData from "../repository/products";
+import { useParams } from 'react-router-dom';
+import { getFirestore } from "../firebase";
 
 const Home = ({className, greeting}) => {
     const [listItems, setListItems] = useState([]);
-
-
+    const {categoryId} = useParams();
 
     useEffect(()=> {
-        const getMockData = new Promise((resolve, reject)=>{
-            setTimeout(()=> {
-                resolve(mockData);
+        const db = getFirestore();
+        let itemCollection;
+
+        console.log("categoryId", categoryId);
+        if(categoryId){
+
+        console.log("CATEGORY");
+            itemCollection = db.collection("items").where('categoryId', '==', categoryId);
+        } else {
+
+            console.log("NO categoryId");
+            itemCollection = db.collection("items");
+        }
+
+        itemCollection.get().then((querySnapshot) => {
+            if(querySnapshot.size === 0){
+                console.log("No results!");
             }
-            , 2_000);
+            setListItems(querySnapshot.docs.map(doc => {
+                return {id:doc.id, ...doc.data()};
+            }));
+        }).catch((error) => {
+            console.log("Error searching items", error);
         });
 
-        getMockData.then(result => {
-            setListItems(result);
-        });
     }, []);
 
     return (<div className={className}>
