@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useState} from "react";
 
 const CartContext = React.createContext([]);
 
@@ -33,7 +33,6 @@ export function CartProvider({defaultValue = [], children}) {
         let count = 0;
         const clone = [...cart];
         count = clone.reduce(function (acc, obj) { return acc + obj.amount; }, 0);
-        console.log("count:" + count);
         return count;
     }
 

@@ -12,15 +12,17 @@ const ItemDetailContainer = ({className}) => {
         const db = getFirestore();
         const itemCollection = db.collection("items");
         const item = itemCollection.doc(id);
-        item.get().then((doc) => {
+        const unsubscribe = item.onSnapshot((doc) => {
             if(!doc.exists){
                 console.log("Item does not exist! :(");
                 return;
             }
             setItem({id:doc.id, ...doc.data()});
-        }).catch((error) => {
+        },(error) => {
             console.log("Error searching item id:" + id, error);
         });
+
+        return unsubscribe;
     });
 
     return (<div className={className}>

@@ -11,18 +11,13 @@ const Home = ({className, greeting}) => {
         const db = getFirestore();
         let itemCollection;
 
-        console.log("categoryId", categoryId);
         if(categoryId){
-
-        console.log("CATEGORY");
             itemCollection = db.collection("items").where('categoryId', '==', categoryId);
         } else {
-
-            console.log("NO categoryId");
             itemCollection = db.collection("items");
         }
 
-        itemCollection.get().then((querySnapshot) => {
+        const unsubscribe = itemCollection.get().then((querySnapshot) => {
             if(querySnapshot.size === 0){
                 console.log("No results!");
             }
@@ -33,7 +28,9 @@ const Home = ({className, greeting}) => {
             console.log("Error searching items", error);
         });
 
-    }, []);
+        return unsubscribe;
+
+    }, [categoryId]);
 
     return (<div className={className}>
         {

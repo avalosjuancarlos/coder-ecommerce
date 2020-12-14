@@ -2,13 +2,13 @@ import React, { useContext } from "react";
 import CartContext from "../context/CartContext";
 import ItemCount from "./ItemCount";
 
-const ItemDetail = ({id, categoryId, title, description, stock }) => {
+const ItemDetail = ({id, categoryId, title, description, price, stock }) => {
 
-    const {cart, addToCart, isInCart, cartSize } = useContext(CartContext);
+    const { addToCart } = useContext(CartContext);
 
     const onAddItem = (amount) => {
         //alert(`Se agregaron ${amount} items`);
-        addToCart({id, title, description, amount});
+        addToCart({id, title, description, price, amount});
     }
 
     return (
@@ -17,6 +17,7 @@ const ItemDetail = ({id, categoryId, title, description, stock }) => {
         <p>CategoryId: {categoryId}</p>
         <p>Titulo: {title}</p>
         <p>Descripción: {description} </p>
+        <p>Valor: {price} </p>
         <p>Stock: {stock}</p>
         <ItemCount min={1} max={stock} onAdd={onAddItem}  />
         </div>
