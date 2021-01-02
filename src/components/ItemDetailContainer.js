@@ -15,6 +15,7 @@ const ItemDetailContainer = ({className}) => {
         const unsubscribe = item.onSnapshot((doc) => {
             if(!doc.exists){
                 console.log("Item does not exist! :(");
+                setItem(undefined);
                 return;
             }
             setItem({id:doc.id, ...doc.data()});
@@ -25,10 +26,16 @@ const ItemDetailContainer = ({className}) => {
         return unsubscribe;
     });
 
+    if(item === undefined) {
+        return (<div className={className}>
+                    <p>Producto NO encontrado</p>
+            </div>);
+    }
+
     return (<div className={className}>
     {
         item == null ? 
-            <p>Loading itemId={id}</p>
+            <p>Loading...</p>
         :
             <ItemDetail {...item} />
     }

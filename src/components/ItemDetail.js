@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import CartContext from "../context/CartContext";
 import ItemCount from "./ItemCount";
 
-const ItemDetail = ({id, categoryId, title, description, price, stock }) => {
+const ItemDetail = ({id, categoryId, title, description, image, price, stock }) => {
 
     const { addToCart } = useContext(CartContext);
 
@@ -13,12 +13,18 @@ const ItemDetail = ({id, categoryId, title, description, price, stock }) => {
 
     return (
         <div>
-        <p>Id: {id}</p>
-        <p>CategoryId: {categoryId}</p>
-        <p>Titulo: {title}</p>
         <p>Descripción: {description} </p>
         <p>Valor: {price} </p>
-        <p>Stock: {stock}</p>
+        <p><img src="/images/100020ew4946001-1.jpg" width="150px" height="150px" /></p>
+        {/* <img src="/images/100020ew4946001-1.jpg" width="150px" height="150px" />
+        <img src="/images/100020gl7498001-1.jpg" width="150px" height="150px" />
+        <img src="/images/100020gl7512001-1.jpg" width="150px" height="150px" /> */}
+
+        {/* <img src="/images/100020gl7513001-1.jpg" width="150px" height="150px" />
+        <img src="/images/100020gl7516001-1.jpg" width="150px" height="150px" />
+        <img src="/images/100020gl7517001-1.jpg" width="150px" height="150px" />
+        <img src="/images/100020gl7519001-1.jpg" width="150px" height="150px" />
+         */}
         <ItemCount min={1} max={stock} onAdd={onAddItem}  />
         </div>
     );
