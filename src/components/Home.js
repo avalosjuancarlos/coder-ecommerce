@@ -1,11 +1,23 @@
 import React, {useState, useEffect} from "react";
 import ItemList from "./ItemList";
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { getFirestore } from "../firebase";
 
 const Home = ({className, greeting}) => {
     const [listItems, setListItems] = useState([]);
     const {categoryId} = useParams();
+
+    let history = useHistory();
+
+    const categorySelected = (e) => {
+        e.preventDefault();
+        const id = e.target.value;
+        if(id === ""){
+            history.push("/");
+        } else {
+            history.push("/categories/"+ id);
+        }
+    };
 
     useEffect(()=> {
         const db = getFirestore();
@@ -14,7 +26,7 @@ const Home = ({className, greeting}) => {
         if(categoryId){
             itemCollection = db.collection("items").where('categoryId', '==', categoryId);
         } else {
-            itemCollection = db.collection("items");
+            itemCollection = db.collection("items").limit(20);
         }
 
         const unsubscribe = itemCollection.get().then((querySnapshot) => {
@@ -32,14 +44,39 @@ const Home = ({className, greeting}) => {
 
     }, [categoryId]);
 
-    return (<div className={className}>
+    if(categoryId){
+        return (<div className={className}>
+            {
+                listItems.length === 0 ? 
+                    <p>Buscando productos ...</p>
+                :
+                    <ItemList data={listItems} />
+            }
+            </div>);    
+    }
+
+    return (
+        <>
         {
             listItems.length === 0 ? 
+            <div className={className}>
                 <p>Buscando productos ...</p>
+            </div>
             :
+            <div className={className}>
+            <p>
+                <select onChange={categorySelected}>
+                    <option value="">TODAS</option>
+                    <option value="0000000001">camperas</option>
+                    <option value="0000000002">conjuntos</option>
+                    <option value="0000000003">buzos</option>
+                </select>
+                </p>
                 <ItemList data={listItems} />
+            </div>
         }
-        </div>);
+        </>
+    );
 };
 
 export default Home;

@@ -36,7 +36,14 @@ export function CartProvider({defaultValue = [], children}) {
         return count;
     }
 
-    return <CartContext.Provider value={{cart, addToCart, isInCart, cartSize: cart.length, cartCount: count }}>
+    function clearCart(){
+        setCart(prev => {
+            setCount(0);
+            return [];
+        });
+    }
+
+    return <CartContext.Provider value={{cart, addToCart, isInCart, cartSize: cart.length, cartCount: count, clearCart }}>
         {children}
     </CartContext.Provider>
 }

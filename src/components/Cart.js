@@ -7,15 +7,22 @@ import 'firebase/firestore';
 
 const Cart = ({className}) => {
 
-    const {cart, cartCount } = useContext(CartContext);
+    const {cart, cartCount, clearCart } = useContext(CartContext);
     const [orderId, setOrderId] = useState(null);
+    const [compraDeshabilitada, setCompraDeshabilitada] = useState(true);
+    const [buyer, setBuyer] = useState({});
 
-    const buyOnClick = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        // { buyer: { name, phone, email }, items: [{id, title, price}], total  }
+
         const items = cart.map(obj => ({id:obj.id, title: obj.title, price: obj.price, qty: obj.amount}));
         const total = cart.reduce((prev, obj) => ( prev +=  (obj.amount * obj.price)), 0);
-        const order = {buyer: {name: "juan", phone: "1234", email: "test@test.ar"}, items: items, total: total};
+        const order = {
+            buyer: {name: buyer.nombre + " " + buyer.apellido, phone: buyer.telefono, email: buyer.email}, 
+            items: items,
+            date: firebase.firestore.Timestamp.fromDate(new Date()),
+            total: total
+        };
 
         createOrder(order);
     }
@@ -26,6 +33,7 @@ const Cart = ({className}) => {
         orders.add(order).then(({id}) => {
             setOrderId(id);
             updateProducts(order.items);
+            clearCart();
             alert("Su compra ha sido exitosa!!!! Se ha generado la orden: " + id);
         }).catch(error => {
             console.log(error);
@@ -58,12 +66,50 @@ const Cart = ({className}) => {
         }
     }
 
+    const handleChange = (e) => {
+        e.persist(); // persist the event
+        const id = e.target.id;
+        const value = e.target.value;
+
+        setBuyer((curBuyer) => {
+                
+            if(!value || value.trim() === ""){
+                    setCompraDeshabilitada(true);
+            } else {
+                if(id === "verificarEmail") { 
+                    setCompraDeshabilitada(curBuyer.email != value);
+                } else if(id === "email") { 
+                    setCompraDeshabilitada(value != curBuyer.verificarEmail);
+                } else if(curBuyer.verificarEmail != curBuyer.email) {
+                    setCompraDeshabilitada(true);
+                } else {
+                    setCompraDeshabilitada(false);
+                }
+            }
+
+            return {
+                ...curBuyer,
+                [id]: value,
+                };
+        });
+    }
+
     const cartRender = () => (
         <div>
-        <ul>{cart.map((item, index) => <li key={index}> {item.id} - {item.description} - {item.price} - {item.amount}</li>)}</ul>
-        <p>
-        <button onClick={buyOnClick}  name="btn_buy" id="btn_buy" >COMPRAR</button>
-        </p>
+            <div>
+                <ul style={{listStyleType:"none", backgroundColor:"whitesmoke"}}>{cart.map((item, index) => <li style={{backgroundColor:"whitesmoke"}} key={index}> {item.id} - {item.description} - {item.price} - {item.amount}</li>)}</ul>
+            </div>
+            <div className={className}>
+            <form onSubmit={handleSubmit} >
+                <label style={{width:140}}>Nombre</label><input type="text" id="nombre" onChange={handleChange} /><br/>
+                <label style={{width:140}}>Apellido</label><input type="text" id="apellido" onChange={handleChange} /><br/>
+                <label style={{width:140}}>Teléfono</label><input type="tel" id="telefono" onChange={handleChange} /><br/>
+                <label style={{width:140}}>Email</label><input type="email" id="email" onChange={handleChange} /><br/>
+                <label style={{width:140}}>Verificar Email</label><input type="email" id="verificarEmail" onChange={handleChange} /><br/>
+                <br/>
+                <button type="submit" disabled={compraDeshabilitada} >Realizar Compra</button>  
+            </form>
+            </div>
         </div>
     )
 

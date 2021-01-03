@@ -6,7 +6,6 @@ import './NavBar.css';
 const NabBar = () => (
   <ul className="navigation">
     <li><Link to="/">Home</Link></li>
-    <li><Link to="/categories">Categories</Link></li>
     <li><Link to="/cart">Cart <CartIcon/></Link></li>
     <li><Link to="/">About</Link></li>
   </ul>

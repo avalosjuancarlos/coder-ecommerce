@@ -15,7 +15,7 @@ const ItemDetail = ({id, categoryId, title, description, image, price, stock }) 
         <div>
         <p>Descripción: {description} </p>
         <p>Valor: {price} </p>
-        <p><img src="/images/100020ew4946001-1.jpg" width="150px" height="150px" /></p>
+        <p><img src={image} alt={title} width="150px" height="150px" /></p>
         {/* <img src="/images/100020ew4946001-1.jpg" width="150px" height="150px" />
         <img src="/images/100020gl7498001-1.jpg" width="150px" height="150px" />
         <img src="/images/100020gl7512001-1.jpg" width="150px" height="150px" /> */}
