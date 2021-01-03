@@ -21,7 +21,8 @@ const Cart = ({className}) => {
             buyer: {name: buyer.nombre + " " + buyer.apellido, phone: buyer.telefono, email: buyer.email}, 
             items: items,
             date: firebase.firestore.Timestamp.fromDate(new Date()),
-            total: total
+            total: total,
+            state: "generada"
         };
 
         createOrder(order);
@@ -32,15 +33,14 @@ const Cart = ({className}) => {
         const orders = db.collection("orders");
         orders.add(order).then(({id}) => {
             setOrderId(id);
-            updateProducts(order.items);
+            updateProducts(order.items, id);
             clearCart();
-            alert("Su compra ha sido exitosa!!!! Se ha generado la orden: " + id);
         }).catch(error => {
             console.log(error);
         });
     };
 
-    const updateProducts = async (items) => {
+    const updateProducts = async (items, orderId) => {
         const db = getFirestore();
         const itemsToUpdate = db.collection("items")
         .where(firebase.firestore.FieldPath.documentId(), 'in', items.map(i => i.id));
@@ -59,10 +59,16 @@ const Cart = ({className}) => {
 
         if(outOfStock === 0) {
             await batch.commit();
+            alert("Su compra ha sido exitosa!!!! Se ha generado la orden: " + orderId);
         } else {
-            // Por el momento igual hacemos el commit. 
-            // Hay que ver la forma de no terminar la compra e informarle al usuario que no hay stock
-            await batch.commit();
+            // Por el momento no corroboramos que la orden esté eliminada para informar al usuario
+            db.collection("orders").doc(orderId).delete().then(function() {
+                console.log("Order " + orderId + " successfully deleted!");
+            }).catch(function(error) {
+                console.error("Error removing document: ", error);
+            });
+
+            alert("orden NO generada - Productos fuera de stock:/n" + JSON.stringify(outOfStock));
         }
     }
 
@@ -77,10 +83,10 @@ const Cart = ({className}) => {
                     setCompraDeshabilitada(true);
             } else {
                 if(id === "verificarEmail") { 
-                    setCompraDeshabilitada(curBuyer.email != value);
+                    setCompraDeshabilitada(curBuyer.email !== value);
                 } else if(id === "email") { 
-                    setCompraDeshabilitada(value != curBuyer.verificarEmail);
-                } else if(curBuyer.verificarEmail != curBuyer.email) {
+                    setCompraDeshabilitada(value !== curBuyer.verificarEmail);
+                } else if(curBuyer.verificarEmail !== curBuyer.email) {
                     setCompraDeshabilitada(true);
                 } else {
                     setCompraDeshabilitada(false);
